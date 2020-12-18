@@ -1,16 +1,17 @@
 #include "CEvent.h"
 
+Blib::CEvent::CEvent(bool manual, bool init)
+	: m_manual(manual), m_signaled(init) {}
 
-CEvent::CEvent(bool manual,bool init):m_manual(manual),m_signaled(init){}
-CEvent::~CEvent(){}
+Blib::CEvent::~CEvent() {}
 
-void CEvent::SetEvent()
+void Blib::CEvent::Set()
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
 	m_signaled = true;
 	m_cv.notify_all();
 }
-void CEvent::ResetEvent()
+void Blib::CEvent::Reset()
 {
 	if (!m_manual)
 	{
@@ -20,21 +21,22 @@ void CEvent::ResetEvent()
 	m_signaled = false;
 }
 
-void CEvent::Wait()
+void Blib::CEvent::Wait()
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	m_cv.wait(lock, [this]() {return m_signaled; });
+	m_cv.wait(lock, [this]() { return m_signaled; });
 	if (!m_manual)
 	{
 		m_signaled = false;
 	}
 }
-bool CEvent::WaitFor(std::chrono::milliseconds ms)
+bool Blib::CEvent::WaitFor(uint32_t ms)
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	if (m_cv.wait_for(lock, ms, [this]() {return m_signaled; }))
+	if (m_cv.wait_for(lock, std::chrono::milliseconds(ms), [this]() { return m_signaled; }))
 	{
-		if (!m_manual) {
+		if (!m_manual)
+		{
 			m_signaled = false;
 		}
 		return true;

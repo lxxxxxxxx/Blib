@@ -1,7 +1,7 @@
 /**
  * file BufferQueue.h 
  * A memory buffer queue.
- * @pre need CSemaphore.h include
+ * @pre need CSemaphore.h and MemBlock.h include
  */
 
 #ifndef _BUFFER_QUEUE_H_
@@ -11,83 +11,79 @@
 #include <queue>
 #include <mutex>
 #include "../CSemaphore/CSemaphore.h"
+#include "MemBlock.h"
 
 namespace blib
 {
-    class MemBlock
+    class BufferQueue
     {
     public:
         /**
-        * @brief constructor of MemBlock. \n
-	    * @param[in] size   the initial capacity of memory block.
+        * @brief constructor of BufferQueue. \n
+	    * @param[in] _max   the maximum number of memory blocks that can be buffered.
 	    */
-        MemBlock(uint32_t size);
+        BufferQueue(uint32_t _max);
 
         /**
-        * @brief destructor of MemBlock. \n
+        * @brief destructor of BufferQueue. \n
         */
-        ~MemBlock();
+        ~BufferQueue();
 
         /**
-        * @brief get capacity. \n
-        */
-        uint32_t Capacity();
+        * @brief get a new memory block. \n
+	    * @param[in] size  size of memory block.
+        * @return pointer of new memory block.
+	    */
+        blib::MemBlock *NewBlock(uint32_t size);
 
         /**
-        * @brief get real data size. \n
-        */
+        * @brief push a memory block to queue tail. \n
+	    * @param[in] block  memory block.
+        * @return push result,if size of queue large than max limit,will return false.
+	    */
+        bool Push(blib::MemBlock *block);
+
+        /**
+        * @brief get the front memory block of queue. \n
+	    * @return front memory block.
+	    */
+        blib::MemBlock *Front();
+
+        /**
+        * @brief pop front memory block from queue. \n
+	    */
+        void Pop();
+
+        /**
+        * @brief get size of queue. \n
+	    * @return size of queue.
+	    */
         uint32_t Size();
 
         /**
-        * @brief get block begin pointer. \n
-        */
-        uint8_t *Data();
+        * @brief get whether the queue is empty . \n
+        * @return whether the queue is empty
+	    */
+        bool Empty();
 
         /**
-        * @brief additional writing to block. \n
-        * @param[in] data  data to be writen.
-        * @param[in] size  size of data to be writen.
-        * @return write status,true/false
-        */
-        bool Write(uint8_t *data, uint32_t size);
+        * @brief clear queue. \n
+        * @return clear result.
+	    */
+        bool Clear();
 
         /**
-        * @brief copy read data from this block. \n
-        * @param[in] begin  beginning position to be read.
-        * @param[in] size  size want to read.
-        * @param[out] buf  destination buffer pointer.
-        * @param[out] real  real size read.
-        */
-        void Read(uint8_t *begin, uint32_t size, uint8_t *buf, uint32_t &real);
-
-        /**
-        * @brief additional and shallow copy reading,only return read pointer. \n
-        * @param[in] want  size want to be read.
-        * @param[in] real  size real read.
-        * @return a internal maintained pointer to remember read position.
-        */
-        uint8_t *Read(const uint32_t &want, uint32_t &real);
-
-        /**
-        * @brief get extra data. \n
-        */
-        template <class T>
-        T &&GetExtra();
-
-        /**
-        * @brief set extra data to tab this block. \n
-        * @param[in] extra  extra data pointer.
-        * @param[in] size  size of extra data.
-        */
-        template <class T>
-        void SetExtra(T &extra);
+        * @brief wait for a semaphore ms millisecond. \n
+	    * @param[in] ms  wait time,if ms is -1,will wait infinite
+        * @return wait result,if semaphore > 0 during wait,return true,else wait false.
+	    */
+        bool Wait(uint32_t ms = -1);
 
     private:
-        uint32_t m_cap;
-        uint8_t *m_begin;
-        uint32_t m_end;
-        uint32_t m_gpos; //read position.
-        uint8_t *m_extra;
+        std::queue<blib::MemBlock *> m_queue;
+        std::mutex m_mutex;
+        blib::CSemaphore m_sem;
+        uint32_t m_max;
     };
 
 } // namespace blib

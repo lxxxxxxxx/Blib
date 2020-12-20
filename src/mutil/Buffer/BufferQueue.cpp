@@ -1,52 +1,43 @@
 
+
 #include "BufferQueue.h"
 
-blib::MemBlock::MemBlock(uint32_t size)
-    : m_cap(size), m_end(0), m_gpos(0), m_begin(nullptr),
-      m_extra(nullptr)
+blib::BufferQueue::BufferQueue(uint32_t _max) : m_max(_max), m_sem(0)
 {
 }
 
-blib::MemBlock::~MemBlock()
+blib::BufferQueue::~BufferQueue()
 {
-    if (m_begin)
-    {
-        delete[] m_begin;
-        m_begin = nullptr;
-    }
 }
 
-uint32_t blib::MemBlock::Capacity()
+blib::MemBlock *blib::BufferQueue::NewBlock(uint32_t size)
 {
-    return m_cap;
 }
 
-uint32_t blib::MemBlock::Size()
+bool blib::BufferQueue::Push(blib::MemBlock *block)
 {
-    return m_end;
 }
 
-uint8_t *blib::MemBlock::Data()
+blib::MemBlock *blib::BufferQueue::Front()
 {
-    return m_begin;
 }
 
-bool blib::MemBlock::Write(uint8_t *data, uint32_t size)
+void blib::BufferQueue::Pop()
 {
-    if (!m_begin)
-    {
-        m_begin = new uint8_t[m_cap];
-        if (!m_begin)
-        {
-            return false;
-        }
-    }
 }
 
-void blib::MemBlock::Read(uint8_t *begin, uint32_t size, uint8_t *buf, uint32_t &real);
+uint32_t blib::BufferQueue::Size()
+{
+}
 
-uint8_t *blib::MemBlock::Read(const uint32_t &want, uint32_t &real);
+bool blib::BufferQueue::Empty()
+{
+}
 
-void *blib::MemBlock::GetExtra();
+bool blib::BufferQueue::Clear()
+{
+}
 
-void blib::MemBlock::SetExtra(void *extra, uint32_t size);
+bool blib::BufferQueue::Wait(uint32_t ms = -1)
+{
+}

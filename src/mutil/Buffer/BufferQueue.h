@@ -73,6 +73,12 @@ namespace blib
         bool Clear();
 
         /**
+        * @brief get buffer total size in bytes. \n
+        * @return buffer total size in bytes
+	    */
+        uint32_t Bytes();
+
+        /**
         * @brief wait for a semaphore ms millisecond. \n
 	    * @param[in] ms  wait time,if ms is -1,will wait infinite
         * @return wait result,if semaphore > 0 during wait,return true,else wait false.
@@ -84,6 +90,7 @@ namespace blib
         std::mutex m_mutex;
         blib::CSemaphore m_sem;
         uint32_t m_max;
+        uint32_t m_bytes;
     };
 
 } // namespace blib

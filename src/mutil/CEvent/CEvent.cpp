@@ -21,25 +21,24 @@ void Blib::CEvent::Reset()
 	m_signaled = false;
 }
 
-void Blib::CEvent::Wait()
+bool Blib::CEvent::Wait(uint32_t ms)
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	m_cv.wait(lock, [this]() { return m_signaled; });
+	if (-1 == ms)
+	{
+		m_cv.wait(lock, [this]() { return m_signaled; });
+	}
+	else
+	{
+		if (!m_cv.wait_for(lock, std::chrono::milliseconds(ms), [this]() { return m_signaled; }))
+		{
+			return false;
+		}
+	}
 	if (!m_manual)
 	{
 		m_signaled = false;
 	}
-}
-bool Blib::CEvent::WaitFor(uint32_t ms)
-{
-	std::unique_lock<std::mutex> lock(m_mutex);
-	if (m_cv.wait_for(lock, std::chrono::milliseconds(ms), [this]() { return m_signaled; }))
-	{
-		if (!m_manual)
-		{
-			m_signaled = false;
-		}
-		return true;
-	}
-	return false;
+
+	return true;
 }

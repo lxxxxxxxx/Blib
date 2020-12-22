@@ -14,35 +14,34 @@ namespace Blib
 	class CEvent
 	{
 	public:
-		/*
-	    * @param[in] manual  Whether to reset manually,if false, reset event after wait.
-	    * @param[in] init    Whether event is signaled when it initalizetrue.
-	    */
+		/**
+		 * @brief constructor. \n
+	     * @param[in] manual  Whether to reset manually,if false, reset event after wait.
+	     * @param[in] init    Whether event is signaled when it initalizetrue.
+	     */
 		CEvent(bool manual, bool init);
 
+		/**
+		 * @brief destructor. \n
+		 */
 		~CEvent();
 
-		/*
-        * @brief signed event. \n
-        */
+		/** 
+         * @brief signed event. \n
+         */
 		void Set();
 
-		/*
-		* @brief unsigned event. \n
-		*/
+		/**
+	 	 * @brief unsigned event. \n
+		 */
 		void Reset();
 
-		/*
-		* @brief wait for event signed forever. \n
+		/**
+		* @brief wait event signaled for ms ms,if no timeout specified,will wait infinitely. \n
+		* @param[in] ms  timeout.
+		* @return return wait status,true - event signaled during wait,false - timeout.
 		*/
-		void Wait();
-
-		/*
-		* @brief wait event signaled for ms ms. \n
-		* @param[in] ms  wait time.
-		* @return return wait status,true - event signaled during wait,false - otherwise(timeout or unsigned).
-		*/
-		bool WaitFor(uint32_t ms);
+		bool Wait(uint32_t ms = -1);
 
 	private:
 		std::mutex m_mutex;

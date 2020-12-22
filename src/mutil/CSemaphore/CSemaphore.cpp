@@ -7,28 +7,28 @@ blib::CSemaphore::~CSemaphore()
 {
 }
 
-void blib::CSemaphore::Wait()
+bool blib::CSemaphore::Wait(uint32_t ms)
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-
-	m_cv.wait(lock, [this]() { return m_count > 0; });
-	m_count--;
-}
-
-bool blib::CSemaphore::WaitFor(std::chrono::milliseconds ms)
-{
-	std::unique_lock<std::mutex> lock(m_mutex);
-	if (m_cv.wait_for(lock, ms, [this]() { return m_count > 0; }))
+	if (-1 == ms)
 	{
-		m_count--;
-		return true;
+		m_cv.wait(lock, [this]() { return m_count > 0; });
 	}
-	return false;
+	else
+	{
+		if (!m_cv.wait_for(lock, std::chrono::milliseconds(ms), [this]() { return m_count > 0; }))
+		{
+			return false;
+		}
+	}
+	m_count--;
+	return true;
 }
 
-void blib::CSemaphore::Signal()
+void blib::CSemaphore::Signal(uint32_t increase)
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	m_count++;
+	m_count += increase;
+	//TODO:bug - should notify 'increase' number.
 	m_cv.notify_one();
 }

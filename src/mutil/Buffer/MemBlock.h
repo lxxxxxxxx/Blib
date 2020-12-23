@@ -1,10 +1,10 @@
 /**
- * file MemBlock.h 
- * A memory block class.
+ * @file MemBlock.h 
+ * @brief A memory block class.
  */
 
-#ifndef _MEM_BLOCK_H_
-#define _MEM_BLOCK_H_
+#ifndef _BLIB_MEM_BLOCK_H_
+#define _BLIB_MEM_BLOCK_H_
 
 #include <stdint.h>
 

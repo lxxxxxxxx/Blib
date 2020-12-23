@@ -1,4 +1,10 @@
-#pragma once
+/**
+* @file CSemaphore.h
+* @brief semaphore for thread synchronous
+*/
+
+#ifndef _BLIB_CSEMAPHORE_H_
+#define _BLIB_CSEMAPHORE_H_
 
 #include <mutex>
 #include <condition_variable>
@@ -32,9 +38,17 @@ namespace blib
 		*/
 		void Signal(uint32_t increase = 1);
 
+		/**
+		* @brief get semaphore count. \n
+		* @return count of semaphore(s).
+		*/
+		uint32_t Count();
+
 	private:
 		std::mutex m_mutex;
 		std::condition_variable m_cv;
 		int m_count;
 	};
 } // namespace blib
+
+#endif

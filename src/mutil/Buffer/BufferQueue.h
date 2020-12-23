@@ -1,11 +1,11 @@
 /**
- * file BufferQueue.h 
- * A memory buffer queue.
+ * @file BufferQueue.h 
+ * @brief A memory buffer queue.
  * @pre need CSemaphore.h and MemBlock.h include
  */
 
-#ifndef _BUFFER_QUEUE_H_
-#define _BUFFER_QUEUE_H_
+#ifndef _BLIB_BUFFER_QUEUE_H_
+#define _BLIB_BUFFER_QUEUE_H_
 
 #include <stdint.h>
 #include <queue>
@@ -73,8 +73,8 @@ namespace blib
         bool Clear();
 
         /**
-        * @brief get buffer total size in bytes. \n
-        * @return buffer total size in bytes
+        * @brief get buffer queue total size in bytes. \n
+        * @return buffer queue total size in bytes
 	    */
         uint32_t Bytes();
 

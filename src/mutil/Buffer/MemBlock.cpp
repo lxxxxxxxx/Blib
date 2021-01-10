@@ -1,5 +1,6 @@
 
 #include "MemBlock.h"
+#include <memory>
 #include <assert.h>
 #include <memory>
 

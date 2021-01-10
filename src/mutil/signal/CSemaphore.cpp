@@ -32,3 +32,9 @@ void blib::CSemaphore::Signal(uint32_t increase)
 	//TODO:bug - should notify 'increase' number.
 	m_cv.notify_one();
 }
+
+uint32_t blib::CSemaphore::Count()
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	return m_count;
+}

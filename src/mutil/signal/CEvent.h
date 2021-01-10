@@ -1,6 +1,6 @@
-/*
-* file CEvent.h
-* event for thread synchronous
+/**
+* @file CEvent.h
+* @brief event for thread synchronous
 */
 
 #ifndef _BLIB_CEVENT_H_
@@ -9,7 +9,7 @@
 #include <mutex>
 #include <condition_variable>
 
-namespace Blib
+namespace blib
 {
 	class CEvent
 	{
@@ -42,6 +42,12 @@ namespace Blib
 		* @return return wait status,true - event signaled during wait,false - timeout.
 		*/
 		bool Wait(uint32_t ms = -1);
+
+		/**
+		 * @brief get event status. \n
+		 * @return true - event is signaled,falst - not signaled
+		 */
+		bool Signaled();
 
 	private:
 		std::mutex m_mutex;

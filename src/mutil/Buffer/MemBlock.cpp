@@ -1,6 +1,7 @@
 
 #include "MemBlock.h"
 #include <assert.h>
+#include <memory>
 
 blib::MemBlock::MemBlock(uint32_t size)
     : m_cap(size), m_end(0), m_dgpos(0), m_sgpos(0),

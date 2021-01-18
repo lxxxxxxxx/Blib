@@ -100,10 +100,5 @@ uint32_t blib::BufferQueue::Bytes()
 
 bool blib::BufferQueue::Wait(uint32_t ms = -1)
 {
-    if (-1 == ms)
-    {
-        m_sem.Wait();
-        return true;
-    }
-    return m_sem.WaitFor(ms);
+    return m_sem.Wait();
 }

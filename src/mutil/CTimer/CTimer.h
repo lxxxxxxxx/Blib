@@ -25,16 +25,30 @@ public:
 
     ~CTimer();
 
-    uint32_t Now();
-
+    /**
+     * @brief Reset or start timer. \n
+     */
     void Reset();
 
-    void Timeout(uint32_t t, TIME_UNIT unit, std::function<void()> callback);
+    /**
+     * @brief Get time interval since Reset(). \n
+     */
+    template <TIME_UNIT unit = UNIT_MILLI>
+    uint32_t Now();
+
+    /**
+     * @brief call function when timeout. \n
+     * @param[in] t time
+     * @param[in] unit time unit
+     * @param[in] callback callback function
+     */
+    static void Timeout(uint32_t t, TIME_UNIT unit, std::function<void()> callback);
 
     /**
      * @brief create a crontab, call func at ragular intervals. \n
-     * @param[in] us ragular interval
-     * @param[in] func crantab task
+     * @param[in] t ragular interval
+     * @param[in] unit time unit
+     * @param[in] func crantab task function
      */
     static void Crontab(uint32_t t, TIME_UNIT unit, std::function<void()> func);
 

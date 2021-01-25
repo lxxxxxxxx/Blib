@@ -23,7 +23,7 @@ namespace Blib
     class WPipeServer
     {
     public:
-        WPipeServer(std::string name, int maxIns);
+        WPipeServer(std::string name, int maxIns = 1, ReadCompleteFunc r = nullptr, WriteCompleteFunc w = nullptr);
 
         ~WPipeServer();
 
